@@ -1,0 +1,3 @@
+/home/mf/C++Projekt/miniSCADAPID/build/CMakeFiles/pid.dir
+/home/mf/C++Projekt/miniSCADAPID/build/CMakeFiles/edit_cache.dir
+/home/mf/C++Projekt/miniSCADAPID/build/CMakeFiles/rebuild_cache.dir

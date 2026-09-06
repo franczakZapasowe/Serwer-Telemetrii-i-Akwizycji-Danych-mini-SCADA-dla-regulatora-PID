@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/pid.dir/link.d CMakeFiles/pid.dir/main.cpp.o -o pid
