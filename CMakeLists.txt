@@ -9,5 +9,8 @@ add_executable(pid main.cpp
         PID.cpp
         PID.h
         ProcessSimulator.h
+        UDPServer.cpp
+        UDPServer.h
+        Serwer.cpp
 )
 
