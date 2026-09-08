@@ -8,7 +8,6 @@ add_executable(pid main.cpp
         PIDTelemetryPayload.h
         PID.cpp
         PID.h
-        build/PV.cpp
-        build/PV.h
+        ProcessSimulator.h
 )
 

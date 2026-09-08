@@ -8,12 +8,15 @@ class PID {
     float m_dt;                   // delta t
     float m_output{};             // wyjscie
     float m_last_I{};
-
+    float m_antiWindupMin, m_antiWindupMax, m_outputMin, m_outputMax;
     public:
-    PID (float kp, float ki, float kd, float dt)
-        : m_Kp(kp), m_Ki(ki), m_Kd(kd), m_dt(dt) {}
+    PID (float kp, float ki, float kd, float dt, float antiWindupMin, float antiWindupMax, float outputMin, float outputMax)
+        : m_Kp(kp), m_Ki(ki), m_Kd(kd), m_dt(dt),
+        m_antiWindupMin(antiWindupMin),m_antiWindupMax(antiWindupMax),
+        m_outputMin(outputMin), m_outputMax(outputMax){}
 
-    float update(float sp, float pv );
-
+    void update(float sp, float pv );
+    [[nodiscard]] float getOutput() const {return m_output;}
+    [[nodiscard]] float getError()const {return m_error;}
 };
 
