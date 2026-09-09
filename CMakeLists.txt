@@ -14,5 +14,7 @@ add_executable(pid main.cpp
         Serwer.cpp
         ThradeSafeQ.cpp
         ThradeSafeQ.h
+        ThreadPool.cpp
+        ThreadPool.h
 )
 

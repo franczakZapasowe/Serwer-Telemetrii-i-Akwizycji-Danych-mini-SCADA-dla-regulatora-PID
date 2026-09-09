@@ -9,7 +9,7 @@ struct PIDTelemetryPayload {
     float process_variable;    // Wartość mierzona (PV) - zaszumiona
     float control_output;      // Wartość sterująca (CV / U)
     float error;               // Aktualny uchyb (e)
-    uint16_t status_flags;     // Flagi bitowe (np. bit 0: ALARM, bit 1: MANUAL_MODE)
+    uint16_t status_flags = 1;     // Flagi bitowe (np. bit 0: ALARM, bit 1: MANUAL_MODE)
     uint16_t checksum;         // Suma kontrolna (np. CRC16) upewniająca nas o integralności payloadu
 };
 #pragma pack(pop)

@@ -6,6 +6,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <chrono>
+#include <cstring>
+
 #include "PIDTelemetryPayload.h"
 #include <thread>
 
@@ -47,7 +49,7 @@ int main(){
 	auto start_of_simulation = std::chrono::steady_clock::now(); // dla obliczania czasu calej symualacji
 	auto last_time = std::chrono::steady_clock::now();  // czas przed symulacja dla obliczania pojedynczej iteracji
 	float dt{0.3f}; // dt
-	for (int i =0; i<1000;i++) {
+	for (int i = 0; i<10;i++) {
 		auto iteration_time = std::chrono::steady_clock::now(); // koniec dla jednej iteracji
 		dt = std::chrono::duration<float>(iteration_time - last_time).count();
 		last_time = iteration_time;
@@ -57,7 +59,7 @@ int main(){
 		const auto current_time = std::chrono::steady_clock::now(); // czas potrzebny dla obliczenia jednego wyniku
 		auto timestamp_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_of_simulation); // czas od poczatku symulacji do teraz
 
-		PIDTelemetryPayload pidPayload = spakuj(i,timestamp_ms_duration,sp,pv.getPV(),pid.getOutput(),pid.getError(),0,0); // 2 ostatnie elemnty dalem na 0 bo nie wiem jhak maja dzialac jak dasz mi wymogi do nich to zmeinie to
+		PIDTelemetryPayload pidPayload = spakuj(i,timestamp_ms_duration,sp,pv.getPV(),pid.getOutput(),pid.getError(),1,0); // 2 ostatnie elemnty dalem na 0 bo nie wiem jhak maja dzialac jak dasz mi wymogi do nich to zmeinie to
 		int sendStatus = sendto(clientSocket, reinterpret_cast<const char *>(&pidPayload), sizeof(PIDTelemetryPayload),
 		                        0, reinterpret_cast<sockaddr *>(&serverAddr), serverAddrLen);
 		if (sendStatus == -1) {
@@ -66,7 +68,10 @@ int main(){
 		}
 		std::cout<<"Iteracja "<<i<<" SP: "<<sp<<" PV: "<<pv.getPV()<<" ControlOutput"<<pid.getOutput()<<" ERROR "<< pid.getError()<<"\n";
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
-
 	}
+		PIDTelemetryPayload pidPayload = spakuj(0,std::chrono::milliseconds(0),0,0,0,0,0,0); // 2 ostatnie elemnty dalem na 0 bo nie wiem jhak maja dzialac jak dasz mi wymogi do nich to zmeinie to
+		sendto(clientSocket, reinterpret_cast<const char *>(&pidPayload), sizeof(PIDTelemetryPayload),
+							0, reinterpret_cast<sockaddr *>(&serverAddr), serverAddrLen);
+
 	return 0;
 }

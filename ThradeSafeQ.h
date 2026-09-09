@@ -1,8 +1,8 @@
 #pragma once
-
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <atomic>
 #include "PIDTelemetryPayload.h"
 
 class ThradeSafeQ {
@@ -11,6 +11,7 @@ class ThradeSafeQ {
     std::condition_variable cv;
     bool flag{false};
 public:
+    ThradeSafeQ() = default;
     void push(PIDTelemetryPayload p);
     void pop(PIDTelemetryPayload& p);
 };
