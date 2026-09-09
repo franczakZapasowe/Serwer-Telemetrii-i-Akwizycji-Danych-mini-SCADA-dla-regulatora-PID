@@ -48,7 +48,7 @@ void UDPServer::startListening() {
             continue;
         }
         std::memcpy(&pidPayload,buffor,sizeof(PIDTelemetryPayload)); //kopia binarna
-        std::cout<<"Packet_id: "<<pidPayload.packet_id<<" pv: "<<pidPayload.process_variable<<" error: "<<pidPayload.error<<"\n";
+        std::cout<<"Packet_id: "<<pidPayload.packet_id<<" pv: "<<pidPayload.process_variable<<" error: "<<pidPayload.error<<" time: "<<pidPayload.timestamp_ms<<" ms\n";
     }
     close(serwerSocker);
 }

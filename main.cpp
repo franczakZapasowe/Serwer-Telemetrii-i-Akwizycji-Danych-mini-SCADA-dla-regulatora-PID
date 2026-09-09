@@ -43,20 +43,26 @@ int main(){
 	PID pid(0.1f,0.0f,0.0f,0.5f, -1.0f, 1.0f, -50.0f, 50.0f);
 	ProcessSimulator pv(0.1);
 	float sp = 2.0f;
+
+	auto zerowy = std::chrono::steady_clock::now();
+	auto start_of_simulation = std::chrono::steady_clock::now();
+	std::chrono::microseconds total_time{};
 	for (int i =0; i<1000;i++) {
-		const auto start = std::chrono::steady_clock::now();
 		pv.updatePv(pid.getOutput());
 		pid.update(sp, pv.getPV());
-		const auto stop = std::chrono::steady_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+		const auto current_time = std::chrono::steady_clock::now();
+		auto timestamp_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_of_simulation);
+		total_time+=timestamp_ms_duration; // calkowity czas od poczatku dzialania petli
 
-		PIDTelemetryPayload pidPayload = spakuj(i,duration,sp,pv.getPV(),pid.getOutput(),pid.getError(),0,0); // 2 ostatnie elemnty dalem na 0 bo nie wiem jhak maja dzialac jak dasz mi wymogi do nich to zmeinie to
+		PIDTelemetryPayload pidPayload = spakuj(i,timestamp_ms_duration,sp,pv.getPV(),pid.getOutput(),pid.getError(),0,0); // 2 ostatnie elemnty dalem na 0 bo nie wiem jhak maja dzialac jak dasz mi wymogi do nich to zmeinie to
 		int sendStatus = sendto(clientSocket,reinterpret_cast<const char*>(&pidPayload),sizeof(PIDTelemetryPayload),0,reinterpret_cast<sockaddr*>(&serverAddr),serverAddrLen);
 		if (sendStatus == -1) {
 			std::cerr<<"FAIL TO SEND DATA\n";
 			exit(1);
 		}
-		std::cout<<"Iteracja "<<i<<" SP: "<<sp<<" PV: "<<pv.getPV()<<" ControlOutput"<<pid.getOutput()<<" ERROR "<< pid.getError()<<"\n";	}
+		std::cout<<"Iteracja "<<i<<" SP: "<<sp<<" PV: "<<pv.getPV()<<" ControlOutput"<<pid.getOutput()<<" ERROR "<< pid.getError()<<"\n";
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
+	}
 	return 0;
 }
