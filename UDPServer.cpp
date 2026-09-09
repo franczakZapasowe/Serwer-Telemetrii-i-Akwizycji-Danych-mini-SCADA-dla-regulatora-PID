@@ -1,14 +1,11 @@
-//
-// Created by mf on 9/8/26.
-//
-#include "UDPServer.h"
-
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "UDPServer.h"
 #include "PIDTelemetryPayload.h"
+#include "ThradeSafeQ.h"
 void UDPServer::startListening() {
 
     int serwerSocker = socket(AF_INET, SOCK_DGRAM, 0);
@@ -35,6 +32,7 @@ void UDPServer::startListening() {
     char buffor[1024]{};
     PIDTelemetryPayload pidPayload{};
     int recvBytes{};
+    ThradeSafeQ kolejka{};
     while (true) {
         // wywoluje przed kazdym nadpisaniem, zeby nie bylo bled gdy np przyjdzie za maly packet
         socklen_t clientAddrLen = sizeof(clientAddr);
@@ -48,6 +46,7 @@ void UDPServer::startListening() {
             continue;
         }
         std::memcpy(&pidPayload,buffor,sizeof(PIDTelemetryPayload)); //kopia binarna
+        kolejka.pop(pidPayload);
         std::cout<<"Packet_id: "<<pidPayload.packet_id<<" pv: "<<pidPayload.process_variable<<" error: "<<pidPayload.error<<" time: "<<pidPayload.timestamp_ms<<" ms\n";
     }
     close(serwerSocker);

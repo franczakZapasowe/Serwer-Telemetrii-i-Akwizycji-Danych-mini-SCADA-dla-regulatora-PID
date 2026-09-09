@@ -12,5 +12,7 @@ add_executable(pid main.cpp
         UDPServer.cpp
         UDPServer.h
         Serwer.cpp
+        ThradeSafeQ.cpp
+        ThradeSafeQ.h
 )
 
