@@ -34,8 +34,8 @@ void UDPServer::startListening() {
     PIDTelemetryPayload pidPayload{};
     int recvBytes{};
     ThradeSafeQ kolejka{};
-    // ThreadPool threadPool(&kolejka);
-    // std::thread t1 (threadPool.workerLoop);
+    ThreadPool threadPool(&kolejka);
+    std::thread t1 (&ThreadPool::workerLoop,&threadPool);
 
 
     while (true) {
@@ -54,6 +54,10 @@ void UDPServer::startListening() {
         if (pidPayload.status_flags==0) break; // alarm
         kolejka.push(pidPayload);
     }
+
+    //musimy dac jakos logike odczekania
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    running.store(false);  // ustawiamy falsz tutaj
     close(serwerSocket);
-    //t1.join();
+    t1.join();
 }

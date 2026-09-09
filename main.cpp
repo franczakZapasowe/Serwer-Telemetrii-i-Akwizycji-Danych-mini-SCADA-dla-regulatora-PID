@@ -49,7 +49,7 @@ int main(){
 	auto start_of_simulation = std::chrono::steady_clock::now(); // dla obliczania czasu calej symualacji
 	auto last_time = std::chrono::steady_clock::now();  // czas przed symulacja dla obliczania pojedynczej iteracji
 	float dt{0.3f}; // dt
-	for (int i = 0; i<10;i++) {
+	for (int i = 0; i<100;i++) {
 		auto iteration_time = std::chrono::steady_clock::now(); // koniec dla jednej iteracji
 		dt = std::chrono::duration<float>(iteration_time - last_time).count();
 		last_time = iteration_time;
