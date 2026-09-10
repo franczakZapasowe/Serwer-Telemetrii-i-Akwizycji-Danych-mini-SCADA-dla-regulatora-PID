@@ -8,6 +8,8 @@
 #include "PIDTelemetryPayload.h"
 #include "ThradeSafeQ.h"
 #include "ThreadPool.h"
+
+
 void UDPServer::startListening() {
 
     int serwerSocket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -35,8 +37,7 @@ void UDPServer::startListening() {
     int recvBytes{};
     ThradeSafeQ kolejka{};
     ThreadPool threadPool(&kolejka);
-    std::thread t1 (&ThreadPool::workerLoop,&threadPool);
-
+    std::thread t1 (&ThreadPool::workerLoop,&threadPool); // tu w petli wykonuje sie pull
 
     while (true) {
         // wywoluje przed kazdym nadpisaniem, zeby nie bylo bled gdy np przyjdzie za maly packet
@@ -55,9 +56,8 @@ void UDPServer::startListening() {
         kolejka.push(pidPayload);
     }
 
-    //musimy dac jakos logike odczekania
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    running.store(false);  // ustawiamy falsz tutaj
+    kolejka.abort();
     close(serwerSocket);
     t1.join();
 }

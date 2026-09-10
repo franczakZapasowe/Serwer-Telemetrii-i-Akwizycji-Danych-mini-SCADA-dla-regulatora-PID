@@ -10,9 +10,11 @@ class ThradeSafeQ {
     std::queue<PIDTelemetryPayload>kolejka;
     std::condition_variable cv;
     bool flag{false};
+    bool closeStatus{false};
 public:
     ThradeSafeQ() = default;
     void push(PIDTelemetryPayload p);
-    void pop(PIDTelemetryPayload& p);
+    bool pop(PIDTelemetryPayload& p);
+    void abort();
 };
 
