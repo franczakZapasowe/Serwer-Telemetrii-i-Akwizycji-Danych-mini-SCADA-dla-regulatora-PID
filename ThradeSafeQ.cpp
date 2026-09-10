@@ -6,7 +6,6 @@
 void ThradeSafeQ::push(PIDTelemetryPayload p) {
     std::unique_lock<std::mutex> lock(mutex);
     kolejka.push(p);
-    std::cerr<<"[INFO] ADD ITEM TO QUEUE: \n";
     cv.notify_one();
 }
 

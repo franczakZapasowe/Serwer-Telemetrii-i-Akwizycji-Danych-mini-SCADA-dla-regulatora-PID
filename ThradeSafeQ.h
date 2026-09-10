@@ -9,7 +9,6 @@ class ThradeSafeQ {
     std::mutex mutex;
     std::queue<PIDTelemetryPayload>kolejka;
     std::condition_variable cv;
-    bool flag{false};
     bool closeStatus{false};
 public:
     ThradeSafeQ() = default;
